@@ -1,0 +1,331 @@
+# 20.12.7
+moop：my own opinion
+
+公式格式展示：
+
+When $( a \ne 0 )$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are:
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+	
+$$
+\begin{aligned}
+\dot{x} & = \sigma(y-x) \\
+\dot{y} & = \rho x - y - xz \\
+\dot{z} & = -\beta z + xy
+\end{aligned}
+$$
+
+
+直接表达自己的问题、说出自己的疑惑
+
+markdownpad破解码
+Email address :
+ Soar360@live.com  
+
+License key : 
+GBPduHjWfJU1mZqcPM3BikjYKF6xKhlKIys3i1MU2eJHqWGImDHzWdD6xhMNLGVpbP2M5SN6bnxn2kSE8qHqNY5QaaRxmO3YSMHxlv2EYpjdwLcPwfeTG7kUdnhKE0vVy4RidP6Y2wZ0q74f47fzsZo45JE2hfQBFi2O9Jldjp1mW8HUpTtLA2a5/sQytXJUQl/QKO0jUQY4pa5CCx20sV1ClOTZtAGngSOJtIOFXK599sBr5aIEFyH0K7H4BoNMiiDMnxt1rD8Vb/ikJdhGMMQr0R4B+L3nWU97eaVPTRKfWGDE8/eAgKzpGwrQQoDh+nzX1xoVQ8NAuH+s4UcSeQ==
+
+# 20.12.12
+reinforcement learning chapter2 主要内容：搜索与贪心的平衡（balancing exploration & exploit）
+相关方法：
+
+- 概率贪心；
+- softmax-->基于每个action的value改变action被选中的概率、pursuit-->缓慢贪心；
+- 使当前最优的action被选中的概率逐渐逼近1、其他的逼近0；
+- reinforcement comparison 也是改变概率，但是改变概率的方式与softmax略有差别，引入了preference值
+
+# 20.12.13
+any problem of learning goal-directed behavior can be reduced to three
+signals passing back and forth between an agent and its environment: 
+
+- one signal to represent the choices made by the agent (the actions), 
+- one signal to represent the basis on which the choices are made (the states), 
+- one signal to define the agent’s goal (the rewards)
+
+where the return, Rt , is defined as some specific function of the reward sequence。In the simplest case
+the return is the sum of the rewards: Rt = rt+1 + rt+2 + rt+3 + · · · + rT
+
+The value functions V π and Qπ can be estimated from experience.
+
+π policy? probability?
+
+chapter3的主题是描述适用强化学习的问题特征
+
+# 20.12.14
+## chapter3的部分总结性摘抄
+Reinforcement learning is about learning from interaction how to behave in order to achieve a goal.
+
+- the actions are the choices made by the agent; 
+
+- the states are the basis for making the choices; 
+
+- the rewards are the basis for evaluating the choices.
+
+A policy is a stochastic rule by which the agent selects actions as a function of states
+
+The undiscounted formulation is appropriate for episodic tasks
+
+the discounted formulation is appropriate for continuing tasks
+
+Most of the current theory of reinforcement learning is restricted to finite MDPs
+
+value function->用于确定选择哪个action？
+“A policy’s value functions assign to each state, or state–action pair, the expected 
+return from that state, or state–action pair, given that the agent uses the policy. The
+optimal value functions assign to each state, or state–action pair, the largest expected
+return achievable by any policy. A policy whose value functions are optimal is an
+optimal policy.”完全没理解
+
+# 20.12.15
+## 《0A Study of Evolutionary Multiagent Models based on symbiosis》
+纳什均衡（Nash Equilibria）：个体理性解（Individual Rationality）与群体理性解（Group Rationality）发生冲突 e.g.囚徒困境
+
+帕累托最优（Pareto Optimality）：帕雷托最优是指资源分配的一种理想状态。给定固有的一群人和可分配的资源，如果从一种分配状态到另一种状态的变化中，在没有使任何人境况变坏的前提下，使得至少一个人变得更好，这就是帕雷托改善。
+
+帕雷托最优的状态就是不可能再有更多的帕雷托改善的状态；换句话说，不可能在不使任何其他人受损的情况下再改善某些人的境况。
+需要指出的是，帕雷托最优只是各种理想态标准中的“最低标准”。也就是说，一种状态如果尚未达到帕雷托最优，那么它一定是不理想的，因为还存在改进的余地，可以在不损害任何人的前提下使某一些人的福利得到提高。但是一种达到了帕雷托最优的状态并不一定真的很“理想”。
+比如说，假设一个社会里只有一个百万富翁和一个快饿死的乞丐
+
+genetic programming：基因编程，一种进化学习的算法。有点类似于遗传算法（GA），还不知道具体的区别？
+
+“Therefore, in symbiotic learning, each agent made up of an individual changes its own strategy, while in symbiotic evolution, each agent consisting of a population changes its respective strategies”
+学习的过程，以个体为基本单位；进化的过程，以种群为基本单位（此处的种群应该是指很多的不同个体，而不是生物意义上的同种生物所构成的种群。使用communtiy（群落）或许更合理）
+
+1. [Initialization]: Strategies and symbiotic relations of agents are initialized.
+2. [Selection of agents]: Self agent s and its opponent agent o are selected.
+3. [Production of offspring]: Produce offspring of agent s whose strategies are changed by genetic operations.
+4. [Evaluation]: A pair of individuals selected from agent s , including parent and offspring, and agent o is evaluated.
+5. [Symbiotic ranking]: Rank of a pair of individuals of agent s and agent o is calculated using multiobjective ranking method considering the symbiotic relation from agent s toward agent o .
+6. [Selection of individuals]: The better individuals of agent s with respect to the above rank are transferred to the next generation.
+7. [Terminal condition]: Procedures 2)~6) are repeated until a terminal condition meets.
+
+rank rule: The rank of evaluation point(P) is determined to be R+1 when it is dominated by other R evaluation points under the symbiotic relation of agent S toward o .
+
+不同模式下的rank规则不一样
+
+# 20.12.16
+## 《0A Study of Evolutionary Multiagent Models based on symbiosis》
+
+|relationship	|self		|opponent	|
+|:------:		|:-----:	|:---:		|
+|mutualisim		|^			|^			|
+|harm			|~^			|~^			|
+|predation		|^			|~^			|
+|altrusim		|~^			|^			|
+|mark|^：获益|		~^：受损|
+这些relationship的物理意义不清楚？
+
+推瓷砖占位置：既可以把属于自己的得分瓷砖（score tile）推到自己的hole得分，也可以把自己的扰乱瓷砖（disturbance tile）推到别人的hole阻止别人得分
+
+GNP是有向图结构
+
+3类node：
+
+- initial node 	从该点启动程序
+- judgement node	对不同的输入有不同的决策函数
+- processing node	决定对环境的改变，例如agent做出什么动作
+
+2种表示：
+
+- Phenotype：拓扑结构
+- Genotype：邻接链表结构
+
+gene structure：类型 label 节点自身judege or process花费的时间（time delay） 邻接节点 转移到该节点的时间（time delay）
+
+accumulate time delay？（自身的delay用不用考虑）
+
+1个MTT中的Agent可以控制多个unit（见Fig6），或者说每个unit都使用相同的GNP。judgement可以获取相关信息，processing可以确定下一步向哪个方向前进。
+
+# 20.12.17
+## 《0A Study of Evolutionary Multiagent Models based on symbiosis》
+评价函数中包含4个指标：得分tile在hole中的数量Ti、得分tile距离hole的方格数量TN（即距离，但是对角线的距离如何计算？）、平均移动的步数（原文：方格的数量）Ci、GNP中每移动一步平均转移的节点数Ni。
+		四个指标有不同的权重，均为正数，但是没有说如何设置的权重系数？
+
+### simulation1：2 agents
+Fig11
+
+柱状图从左到右依次是：自身的提升、对手的提升、自身的受损、对手的受损
+
+第一幅图是mutualisim，二者的evaluation curve不断提升，并最终收敛至相同的值，两条曲线接近重合，这是因为二者目标一致。SPS图像匹配，行为模式是将Score tile投入自己和opponent的hole中，但投入自己hole中的偏多
+
+第二幅图是harm，二者的curve收敛至0，互相损害。SPS图像匹配，投入hole的tile不多，更多的是将score tile搬离hole，或许和权重系数有关？但是将d tile投入hole中应该评分更低，因为权重最大，个人疑惑？
+
+第三幅图是altrusim，二者的目标不一致，都是互相利他，所以curve在某一值附近震荡（这个值有什么特点？是由什么决定的？在这个值附近震荡是否也可以算作收敛？）sps图像匹配，将d tile投入自己的hole中
+
+### simulation2：3 agents
+有两种pattern
+
+研究了改变agent间关系变化时会带来的影响
+
+还是没明白patternB的business model有什么特殊之处。原文说的是“agents are regarded as companies which can take various strategies such as cooperation or competition toward others.”
+
+但是在结果分析的时候，还是没体现出来。
+
+### simulation3：2 agents
+比较了symbiosis（case1）、传统方法（case2）以及群体理性（case3）3种方法。
+
+case1最优，case2最差且最后收敛于纳什均衡，case3位居中间，原文给的原因是：case3采用的标准是标量（E1+E2），而case1则是多目标评估（multiobjective evaluation）？
+
+# 20.12.21
+## 《0A Study of Evolutionary Multiagent Models based on symbiosis》
+GNP是新提出来一种进化算法，使用有向图的基因结构，以便更简单的分析agent的决策机制
+
+In Masbiole, agents can learn or evolve to optimize their objectives considering the benefits/losses of both itself and an opponent agent
+
+In concrete, an agent is constructed by a GNP population, and each individual of an agent corresponds to a GNP program.
+
+一个agent是由一个GNP种群构建的，agent中的每个个体对应GNP中的一个程序。GNP种群是多个程序？or多个基因？答：在MTT中，一个agent包含多个unit，一个unit对应一个有向图。一个有向图即为GNP individual。所有unit的有向图构成GNP的population
+
+Judegement node感知环境（的输入）
+
+Process node做出动作
+
+应用在MTT中
+judgement node如果得到方位输入，可以给出对应方位存在什么；如果给出距离最近的某种物品，则会给出对应物品的所在方位
+
+## 《reinforcement learning》1.1
+
+rl2大特点：trial-and-error search & delayed reward
+
+rl不去描述学习方法，而是去刻画问题。去刻画agent在与环境交互以实现目标过程中所面对的问题的最重要方面。这就要求agent在一定程度上能够感知environment的state，并采取可以改变当前状态的action。由此，公式表达中应包含：state、action和goal
+
+# 20.12.22
+## 《reinforcement learning》
+### 1.1
+监督学习需要外部提供已经被判断好的样本。但是在交互场景中，很难提供既正确又有代表性的行为样本。（代表性指的是能代表所有agent需要交互的场景下正确的行为）
+
+rl的难点之一就是平衡explore和exploitation。单独使用二者其一都无法成功完成任务。
+
+rl的另一个特点是它明确考虑了agent和一个未知环境交互的整个问题。其他的方法只考虑子问题而忽略如何使子问题有效的应用到更完整的场景中（fit into larger picture）
+
+agent需要一个清晰的目标，即：agent可以通过当前直接的感受来判断自己实现这个目标的进度
+
+### 1.2
+rl中，agent可以通过经验来不断完善（refine）自己的技巧
+
+### 1.3
+rl系统的四个主要子元素：policy、reward function、value function、model of environment
+
+policy决定了在给定的时间内agent的行为方式。policy是这样一种映射，能够实现：感知到的state of environment --> action in that state。policy是rl中agent的核心，只靠policy agent就足够决定行为。一般情况，policy可能是随机的。
+
+reward func定义了rl问题中的目标（moop：优化问题中的目标函数）。reward func是一个状态立即、固有的价值（原文：desirability）。
+agent无法改变reward func，reward func是修改policy的依据。如果在某个policy下，做出的action收获了较低的reward，那么可以修改policy。一般情况，reward func是随机的。
+
+value func是一个状态长远情况下的价值（desirability）。某一个状态本身的价值可能不高，但他后续状态的价值可能很高，这就会使这个状态具有一个high value和一个low reward。
+
+reward和value的关系。reward是主要的，value是次要的。但是，我们以value作为选择动作（action choice）的依据，因为value包含着未来更多的reward。
+
+因此，value的目的是获取更多的reward，如果没有reward，也就没有value。value是某个状态预期的reward。
+
+事实上，rl算法中最重要的组成部分就是能够有效估计value的方法。
+
+model用来预测{state，action}所导致的下一个状态和reward。model：{state action} -predict-> {state' reward}
+
+BIngo游戏的例子
+state	棋盘中可能出现的任意一种情况
+policy	在状态下采取行动的规则；	每个policy有对应的取胜概率，这个概率从大量的experience中得来
+
+### 2.1 老虎机游戏
+evaluative feedback能够指出action有多好或多坏，但是无法告知是否是最好的或最坏的
+
+老虎机游戏
+
+机器有n个杆（lever），每轮选一个杆，每个杆都有对应的期望/平均收益。
+
+一次选择叫做一次play
+
+lever对应的expected reward当作action的value
+
+每次做选择时，如果选择estimated value最大的action（即greedy action）认为是exploit
+
+如果不做greedy action则认作是在explore
+
+explore和exploitation的平衡在于：估计的value、不确定度、剩余的机会数
+
+### 2.2  action-value method
+列举了2种评估value的简单方法，指出了纯粹的explore不如explore和exploitation的结合
+Q*(a)：true value
+Q(a)：estimated value
+sample-average method：根据大数定律，当次数足够多的时候，Q收敛于Q*
+epsilon-greedy：以epsilon的概率进行explore，等概地从action中选择一个action。该方法的好处是，当尝试次数很多时，所有的action的Q都会收敛于Q*
+
+### 2.3 softmax selection
+epsilon-greedy存在的不足是等概地从action中进行选择，更合理的方式应该是Q值更高具有更多被选中的机会。引入了Boltzmann distribution，确定action的选中概率
+softmax中存在的问题是温度系数tao难以确定。tao越高，各个action的选中概率越接近，tao越小高Q值action被选中的概率越高
+softmax和epsilon哪个更好还不清楚
+
+### 2.4 evaluation vs instruction
+由于每个action做完之后只能得到一个reward，所以无法确定该action是否正确，即该action是否是最优解。又因为正确性是可以通过尝试所用的action并比较他们的reward就能够得到的，因此，这类问题天然地要求对可选择的action进行搜索。
+instruction learning中的agent会被明确告知哪个action是正确的选择，因此agent不需要在action中进行搜索，但需要在参数空间（parameter space）中进行搜索。
+因此，在action选择的规则修正方面，一条简单的instruction就可以直接用来指导规则的修改，但是在evaluation中，必须在比较完其他action之后，才能做出推断（inference）
+
+# 20.12.23
+## 《reinforcement learning》
+### 2.4 evaluation vs instruction
+binary bandit
+该问题中，只有两个动作以及对应的2个可能的结果：成功 or 失败
+
+如果每个action对应的reward是固定的，那么supervised method可以发挥得很出色；但如果对应的reward是以概率出现的，那么supervised method将有可能在两个action中震荡（eg2个action的成功概率都小于0.5或大于0.5）。
+
+Lrp是一种类似于supervised的方法，他的原理是：如果某个action的reward是success，那么选择这个action的概率会以一定的速度（alpha）向1增加，同时另一个action的选择概率减小相同的大小；如果该action的reward是failure，则概率以同样的速度向0减小。
+
+Lri与Lrp原理基本相同，唯一的区别是只在取得success时进行概率的更新操作，若是failure则直接忽略。
+
+binary bandit task是一个非常有指导意义的特殊的混合了supervised和reinforcement2方面的例子。在某些问题中，supervised发挥的不错，但在有些问题中表现很差。这说明对于有的问题，我们需要更合适的方法。
+
+### 2.5 Incremental Implementation
+
+Qk+1 = Qk + 1/(k+1)[rk+1 - Qk]
+
+NewEstimate←OldEstimate + StepSize [Target − OldEstimate].
+
+Target只是假设的，实际上target有可能是noise
+
+### 2.6 Tracking a Nonstationary Problem
+
+之前考虑的问题中，环境是静态的；但在实际问题中，环境多是动态的。为了更有效的评估Q值（value of action），应当赋予不同时刻的采样值不同大小权重。
+
+最新获得的采样值拥有更大的权重，之前获得的采样值则应被赋予较小的权重。
+
+一种方式就是指数渐进权重平均：(1-alpha)^k*Q0 + sum(alpha(1-alpha)^k-i*ri)。其中，Q0是初始估计值，alph则是step size
+
+### 2.7 Optimistic Initial Values
+
+Q0赋值出现偏差，会在后续引起bias。在sample average中，只要每个action都被选中一次，这个bias就可以被解决；但是在恒定alpha中，bias会永远存在，但是会逐渐减小。
+将Q0设置的比较高（optimistic initialization），也能起到鼓励explore的效果。因为，每个action被选中后，更新后的Q(a)都会小于其他的Q0。
+乐观初始化并不适用于非静态的环境，因为初始情况只会出现一次，所以我们不能过于重视它。
+
+### 2.8 Reinforcement Comparison
+
+如何判断一个action的reward是大还是小，这就需要一个参考依据，即reference reward。一种直接的想法是用之前收获的reward的平均值作为reference。
+
+大于reference reward即判定为高reward，小于reference reward即判定为低reward。基于这种方式的学习方法就被称为reinforcement comparison。
+
+comparison不对action的value进行估计，而是维持对reward的总体估计。为了挑选action，该方法会维护对各个动作的preference，即p(a)。该p(a)会与softmax结合从而确定每个action被选中的概率。
+
+# 20.12.24
+## 《reinforcement learning》
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
