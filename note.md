@@ -1,6 +1,19 @@
 # 20.12.7
 moop：my own opinion
 
+公式格式展示：
+
+When $( a \ne 0 )$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are:
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+	
+$$
+\begin{aligned}
+\dot{x} & = \sigma(y-x) \\
+\dot{y} & = \rho x - y - xz \\
+\dot{z} & = -\beta z + xy
+\end{aligned}
+$$
+
 # 20.12.12
 reinforcement learning chapter2 主要内容：搜索与贪心的平衡（balancing exploration & exploit）
 相关方法：
@@ -113,10 +126,14 @@ lever对应的expected reward当作action的value
 explore和exploitation的平衡在于：估计的value、不确定度、剩余的机会数
 
 ### 2.2  action-value method
-列举了2种评估value的简单方法，指出了纯粹的explore不如explore和exploitation的结合
+介绍了1种评估value的简单方法，指出了纯粹的explore不如explore和exploitation的结合
+
 Q*(a)：true value
+
 Q(a)：estimated value
+
 sample-average method：根据大数定律，当次数足够多的时候，Q收敛于Q*
+
 epsilon-greedy：以epsilon的概率进行explore，等概地从action中选择一个action。该方法的好处是，当尝试次数很多时，所有的action的Q都会收敛于Q*
 
 ### 2.3 softmax selection
@@ -157,12 +174,14 @@ Target只是假设的，实际上target有可能是noise
 
 最新获得的采样值拥有更大的权重，之前获得的采样值则应被赋予较小的权重。
 
-一种方式就是指数渐进权重平均：(1-alpha)^k*Q0 + sum(alpha(1-alpha)^k-i*ri)。其中，Q0是初始估计值，alph则是step size
+一种方式就是指数渐进权重平均：(1-alpha)^k*Q0 + sum(alpha(1-alpha)^k-i*ri)。其中，Q0是初始估计值，alpha则是step size
 
 ### 2.7 Optimistic Initial Values
 
 Q0赋值出现偏差，会在后续引起bias。在sample average中，只要每个action都被选中一次，这个bias就可以被解决；但是在恒定alpha中，bias会永远存在，但是会逐渐减小。
+
 将Q0设置的比较高（optimistic initialization），也能起到鼓励explore的效果。因为，每个action被选中后，更新后的Q(a)都会小于其他的Q0。
+
 乐观初始化并不适用于非静态的环境，因为初始情况只会出现一次，所以我们不能过于重视它。
 
 ### 2.8 Reinforcement Comparison
@@ -173,14 +192,62 @@ Q0赋值出现偏差，会在后续引起bias。在sample average中，只要每
 
 comparison不对action的value进行估计，而是维持对reward的总体估计。为了挑选action，该方法会维护对各个动作的preference，即p(a)。该p(a)会与softmax结合从而确定每个action被选中的概率。
 
-# 20.12.24
+# 20.12.27
 ## 《reinforcement learning》
+### 2.8 Reinforcement Comparison
+每次play结束之后，会更新action被选中的概率，更新的公式为：
+
+p_t+1(a_t) = p_t(a_t) + beta * (r_t - reference_t)
+
+每次play之后，reference_t的更新服从：
+
+reference_t+1 = reference_t + alpha * (r_t - reference_t)
+
+两个公式中的alpha和beta均为正数step-size parameter，其中，alpha属于(0,1]。
+
+### 2.9 Pursuit Methods
+pursuit同时结合了action-value和comparison2种方法的特点，即：既维护每个action的Q(a)，同时也维护对每个action的preference。
+
+value和preference的关系是：preference对value是贪心的。
+
+pursuit最简单的一种情况是：preference即动作被选择的概率。pi_t(a)表示action被选中的概率，那么action被更新的公式为：
+
+pi_t+1(a) = pi_t(a) + beta * (1 - pi_t(a)) if a = a*
+
+pi_t+1(a) = pi_t(a) + beta * (0 - pi_t(a)) else
+
+其中，a*表示具有最大value的action
+
+### 2.10 Associative Search
+associative search是寻找一种映射关系：给定一个situation，能够得到在当前situation时应该选择哪个action。
+
+一个例子，改进的n-arm bandit game。每轮每个action的value分布都会发生改变，但是当value发生改变时，machine的color也会变（相当于提供了一个具有标识作用的clue）。这样，可以统计得到每个color下，action的value分布。
+
+moop：这里的situation与前文中提到的state（state of environment）类似。但是state会受到action的影响，本例中situation的变化与action无关。这也是书中提到的“If actions are allowed to affect the next situation as well as the reward, then we have the full reinforcement learning problem.”
 
 
+### 2.11 Conclusion
+chapter2主要介绍了几种通过改变action被选中的概率来平衡explore和exploitation的方法。
 
+一个promising的idea是用观测值Q的不确定度为依据，来鼓励explore。不确定度越高的Q所对应的action，越有价值被explore。
 
+## 3 The Reinforcement Learning Problem
+Our objective in this chapter is to describe the reinforcement learning problem in a broad sense
 
+We introduce key elements of the problem’s mathematical structure, such as value functions and Bellman equations.
+### 3.1 The Agent–Environment Interface
+elements:
 
+- agent: learner & decision maker
+- environment: everything outside learner
+- state: the representation of environment. s_t belongs to S
+- action: a_t belongs to A(s_t). state & action 都是在离散时间上发生的
+- policy: a mapping from state to PDF of actions. 特定状态下，每个动作被选中的条件概率分布(p(a=a_t|s=s_t))
+- interact: agent对environment做出的一系列action以及environment对action的回应和状态的改变
+
+The agent-environment boundary represents the limit of the agent's absolute control
+
+判断属于agent还是environment的标准是agent是否绝对控制该thing。例如，reward computation虽然是已知的，但是agent无法改变它，所以属于environment。
 
 
 
