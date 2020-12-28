@@ -143,7 +143,9 @@ softmax和epsilon哪个更好还不清楚
 
 ### 2.4 evaluation vs instruction
 由于每个action做完之后只能得到一个reward，所以无法确定该action是否正确，即该action是否是最优解。又因为正确性是可以通过尝试所用的action并比较他们的reward就能够得到的，因此，这类问题天然地要求对可选择的action进行搜索。
+
 instruction learning中的agent会被明确告知哪个action是正确的选择，因此agent不需要在action中进行搜索，但需要在参数空间（parameter space）中进行搜索。
+
 因此，在action选择的规则修正方面，一条简单的instruction就可以直接用来指导规则的修改，但是在evaluation中，必须在比较完其他action之后，才能做出推断（inference）
 
 # 20.12.23
@@ -249,12 +251,76 @@ The agent-environment boundary represents the limit of the agent's absolute cont
 
 判断属于agent还是environment的标准是agent是否绝对控制该thing。例如，reward computation虽然是已知的，但是agent无法改变它，所以属于environment。
 
+# 20.12.28
+## 《reinforcement learning》
+### 3.1 The Agent–Environment Interface
+所有学习目标导向行为的问题都可以被简化成3个signals：
 
+- action: signal to represent the choice made by the agent.
+- state: sgnal to represent做出决定所基于的basis.
+- reward: signal to define the agent's goal.
 
+如何represent action & state 会强烈地影响到agent的performance。目前，如何合理的represent更多的是一门艺术而非科学。
 
+#### example 3.1：Bopreactor 生物反应器
 
+agent需要确定reactor每分钟的温度以及搅拌速率，从而使得反应产物的生成速率最快。在这个问题中：
 
+- action: [temperature; rate]
+- state: [传感器读数; 加入的原料数量]
+- reward: 反应产物生成速率
 
+#### example 3.2: Pick-and-Place Robot 捡东西的机器人
+
+agent控制机器重复pick和place物品的动作，目标是让动作fast and smooth。在这个问题中：
+
+- action: 在每个关节发动机上加载的电压
+- state: 关节处的角度和速度
+- reward: 快速平滑的拾放物品，如果出现急停等现象，可以赋予负reward
+
+#### example 3.3: Recycling Robot 回收机器人
+
+agent负责做出high level decision，让机器人去寻找空易拉罐 or 静止 or 去充电。在这个问题中：
+
+- action: [search; stay; recharge]
+- state: [当前的电量; 当前有无易拉罐]
+- reward: 拿到can赋予正分，耗尽电量赋予大额负分
+
+### 3.2 Goals and Rewards
+agent追求的不是局部最优（max immediate reward），而是全局最优（max cumulative reward）
+
+用reward signal来表示目标是rl区别于其他learning的最大特点
+
+reward signal的作用是使用者告诉agent你想要它实现什么，而不是告诉它如何去实现。
+
+“In particular, the reward signal is not the place to impart to the agent prior knowledge about how to achieve what we want it to do. For example, a chess-playing agent should be rewarded only for actually winning, not for achieving subgoals such as taking its opponent抯 pieces or gaining control of the center of the board.”
+
+关于boundary between agent and environment：“the boundary of the learning agent not at the limit of its physical body, but at the limit of its control”
+
+### 3.3 Returns
+
+我们希望max expected return，此时，Rt是reward序列的函数，最简单的情况是：
+
+Rt = rt+1 + rt+2 + ... + rT
+
+- 对于有明确的terminal state的问题，T是有限的，这种问题成为episodic task；
+- 对于没有terminal state的问题，T是无穷的，这种问题成为continual task；
+
+为了让continual task的Rt收敛，Rt的计算形式改写为下示：
+
+Rt = rt+1 + gamma * rt+2 + gamma^2 * rt+3 + ... + gamma^(T-t-1) * rT
+
+gamma称为衰减率(discount rate)，gamma属于[0, 1]。gamma越接近1，说明agent看得越远。
+
+#### example 3.4: Pole-Balancing
+小车上用铰链固定一根杆，如果杆倾斜超过一定角度或者小车撞到墙壁即认为failure。
+
+该问题既可看作episodic task也可以看作是continual task：
+
+- episodic: 失败即terminal state
+- continual: 每次失败，gamma的k重新开始计数
+
+### 3.4 Unified Notation for Episodic and Continuing Tasks
 
 
 
