@@ -244,7 +244,7 @@ elements:
 - environment: everything outside learner
 - state: the representation of environment. s_t belongs to S
 - action: a_t belongs to A(s_t). state & action 都是在离散时间上发生的
-- policy: a mapping from state to PDF of actions. 特定状态下，每个动作被选中的条件概率分布(p(a=a_t|s=s_t))
+- policy: a mapping from state to PDF of actions. 特定状态下，每个动作被选中的条件概率分布(p(a_t=a|s_t=s))
 - interact: agent对environment做出的一系列action以及environment对action的回应和状态的改变
 
 The agent-environment boundary represents the limit of the agent's absolute control
@@ -320,9 +320,102 @@ gamma称为衰减率(discount rate)，gamma属于[0, 1]。gamma越接近1，说�
 - episodic: 失败即terminal state
 - continual: 每次失败，gamma的k重新开始计数
 
+# 20.12.30
+## 《reinforcement learning》
 ### 3.4 Unified Notation for Episodic and Continuing Tasks
+这一节的内容是统一表示episodic task 和 continual task
 
+episodic task中存在很多episodes，所以用符号s_t,i来表示：t时刻第i个episode的状态。
 
+因为在实际讨论中，经常只讨论1个episode或者讨论所有episodes中都共通的东西，因此将s_t,i简写为s_t。
+
+为了能统一表示，将episode的termination变为进入一个reward为0的吸收态（absorbing state）。
+
+根据以上规定，可以将return改写为：
+
+Rt = sum(k=0, T)gamma^k * r_t+k+1
+
+其中，T=∞与gamma=1不可以同时成立。
+
+### 3.5 The Markov Property
+这一节讨论的是要求state signal提供什么，以及什么是state signal不能提供的
+
+environment和state signal有一个很有趣的性质——Markov property
+
+state signal应该包含瞬时的感知信息，但不应该只包含这些。state representation可以是根据之前一系列sensation而构建的更复杂的形式。
+
+In a word，当前的state应当包含之前state的信息（Markov property）
+
+state signal不必告诉agent所有的environment information，即使一些information对解决问题很有帮助。我们更在意state signal的memory。“In short, we don't fault an agent for not knowing something that matters, but only for having
+known something and then forgotten it”
+
+“Much of the information about the sequence is lost, but all that really matters for the future
+of the game is retained.”不在乎过去所有的information，只在乎会影响未来状态的information。
+后续状态的发展与之前的“path”无关，只与当前的state有关。（Markov property）
+
+{s_t, a_t} --> r_t+1
+
+P{s_t+1=s', r_t+1 = r' | s_t, a_t, r_t, s_t-1, a_t-1, ..., r1, s0, a0} = P{s_t+1=s', r_t+1 = r' | s_t, a_t}
+
+### 3.6 Markov Decision Processes
+transition probabilities: P^a_ss' = P{s_t+1 = s' | s_t = s, a_t = a}
+
+expected value of the next reward: R^a_ss' = E{r_t+1 | s_t = s, a_t = a, s_t+1 = s'}
+
+#### Example 3.7: Recycling Robot MDP
+
+robot的state set 和 action set 如下所示：
+
+- state set: {low, high}
+- action set: A(high) = {search, wait}; A(low) = {search, wait, recharge}
+
+原文中列出了转移概率和期望回报值。在本例中，期望回报值可以理解为每种动作平均可以得到的can。对于low-->high的情况，回报值为-3，
+作为对耗尽电池的惩罚。
+
+MDP transition graph包含2种节点：
+
+- state node
+- action node
+
+### 3.7 Value Functions
+
+value function是根据state计算action的expected return
+
+value function和具体的policy有关 （policy --> action's PDF
+
+value function的计算公式如下：
+
+V^pi(s) = E_pi{Rt | s_t = s} = E_pi{sum(k=0, T)gamma^k * r_t+k+1 | s_t = s}
+
+需要注意的是，terminal state的value永远是0.
+
+action-value function: {s_t=s, a_t = a} --> Rt
+
+Q^pi(s, a) = E_pi{Rt | s_t = s, a_t = a}
+
+获得V^pi 和 Q^pi 有两种方法：Monte Carlo 以及 parameterized function
+
+rl中的value function的基本特性是满足某种迭代关系(与DP相同)
+
+Bellmen Equation基于个人理解的推导:
+
+V^pi(s)
+
+= E_pi{Rt | s_t = s}
+
+= E< Rt >{Rt | policy = pi, s_t = s}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<>表示求均值的变量
+
+= E <r >{r_t+1 + gamma*Rt | policy = pi, s_t = s}&nbsp;&nbsp;&nbsp;&nbsp;(注意，这里的Rt时刻从t+2开始
+
+= E< a >E< s >E< r >{r_t+1 + gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+
+= E< a >E< s >E< r >{r_t+1| policy = pi, s_t = s, a_t = a, s_t+1 = s'} + E< a >E< s >E< r >{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+
+=  E< a >E< s >E< r >{R^a_ss'| policy = pi} + E< a >E< s >E< r >{gamma*Rt | policy = pi,s_t+1 = s'}
+
+= E< a >E< s >E< r >{R^a_ss'| policy = pi} + E< a >E< s >E< r >E_pi{gamma*Rt | s_t+1 = s'}
+
+= E< a >E< s >E< r >[R^a_ss' + gamma*V^pi(s')]
 
 
 
