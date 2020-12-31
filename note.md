@@ -301,14 +301,14 @@ reward signal的作用是使用者告诉agent你想要它实现什么，而不�
 
 我们希望max expected return，此时，Rt是reward序列的函数，最简单的情况是：
 
-Rt = rt+1 + rt+2 + ... + rT
+	Rt = rt+1 + rt+2 + ... + rT
 
 - 对于有明确的terminal state的问题，T是有限的，这种问题成为episodic task；
 - 对于没有terminal state的问题，T是无穷的，这种问题成为continual task；
 
 为了让continual task的Rt收敛，Rt的计算形式改写为下示：
 
-Rt = rt+1 + gamma * rt+2 + gamma^2 * rt+3 + ... + gamma^(T-t-1) * rT
+	Rt = rt+1 + gamma * rt+2 + gamma^2 * rt+3 + ... + gamma^(T-t-1) * rT
 
 gamma称为衰减率(discount rate)，gamma属于[0, 1]。gamma越接近1，说明agent看得越远。
 
@@ -333,7 +333,7 @@ episodic task中存在很多episodes，所以用符号s_t,i来表示：t时刻�
 
 根据以上规定，可以将return改写为：
 
-Rt = sum(k=0, T)gamma^k * r_t+k+1
+	Rt = sum(k=0, T)gamma^k * r_t+k+1
 
 其中，T=∞与gamma=1不可以同时成立。
 
@@ -353,14 +353,14 @@ known something and then forgotten it”
 of the game is retained.”不在乎过去所有的information，只在乎会影响未来状态的information。
 后续状态的发展与之前的“path”无关，只与当前的state有关。（Markov property）
 
-{s_t, a_t} --> r_t+1
+	{s_t, a_t} --> r_t+1
 
-P{s_t+1=s', r_t+1 = r' | s_t, a_t, r_t, s_t-1, a_t-1, ..., r1, s0, a0} = P{s_t+1=s', r_t+1 = r' | s_t, a_t}
+	P{s_t+1=s', r_t+1 = r' | s_t, a_t, r_t, s_t-1, a_t-1, ..., r1, s0, a0} = P{s_t+1=s', r_t+1 = r' | s_t, a_t}
 
 ### 3.6 Markov Decision Processes
-transition probabilities: P^a_ss' = P{s_t+1 = s' | s_t = s, a_t = a}
+	transition probabilities: P^a_ss' = P{s_t+1 = s' | s_t = s, a_t = a}
 
-expected value of the next reward: R^a_ss' = E{r_t+1 | s_t = s, a_t = a, s_t+1 = s'}
+	expected value of the next reward: R^a_ss' = E{r_t+1 | s_t = s, a_t = a, s_t+1 = s'}
 
 #### Example 3.7: Recycling Robot MDP
 
@@ -379,19 +379,19 @@ MDP transition graph包含2种节点：
 
 ### 3.7 Value Functions
 
-value function是根据state计算action的expected return
+value function是根据state计算这个satae的预期收益，即expected return。expected return可以评估一个state的好坏。
 
 value function和具体的policy有关 （policy --> action's PDF
 
-value function的计算公式如下：
+state-value function的计算公式如下：
 
-V^pi(s) = E_pi{Rt | s_t = s} = E_pi{sum(k=0, T)gamma^k * r_t+k+1 | s_t = s}
+	V^pi(s) = E_pi{Rt | s_t = s} = E_pi{sum(k=0, T)gamma^k * r_t+k+1 | s_t = s}
 
 需要注意的是，terminal state的value永远是0.
 
 action-value function: {s_t=s, a_t = a} --> Rt
 
-Q^pi(s, a) = E_pi{Rt | s_t = s, a_t = a}
+	Q^pi(s, a) = E_pi{Rt | s_t = s, a_t = a}
 
 获得V^pi 和 Q^pi 有两种方法：Monte Carlo 以及 parameterized function
 
@@ -399,25 +399,62 @@ rl中的value function的基本特性是满足某种迭代关系(与DP相同)
 
 Bellmen Equation基于个人理解的推导:
 
-V^pi(s)
+	V^pi(s)
 
-= E_pi{Rt | s_t = s}
+	= E_pi{Rt | s_t = s}
 
-= E< Rt >{Rt | policy = pi, s_t = s}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<>表示求均值的变量
+	= E<Rt>{Rt | policy = pi, s_t = s}						<>表示求均值的变量
 
-= E <r >{r_t+1 + gamma*Rt | policy = pi, s_t = s}&nbsp;&nbsp;&nbsp;&nbsp;(注意，这里的Rt时刻从t+2开始
+	= E<r>{r_t+1 + gamma*Rt | policy = pi, s_t = s}		(注意，这里的Rt时刻从t+2开始
 
-= E< a >E< s >E< r >{r_t+1 + gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+	= E<a>E<s'>E<r>{r_t+1 + gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-= E< a >E< s >E< r >{r_t+1| policy = pi, s_t = s, a_t = a, s_t+1 = s'} + E< a >E< s >E< r >{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+	= E<a>E<s'>E<r>{r_t+1| policy = pi, s_t = s, a_t = a, s_t+1 = s'} + E<a>E<s>E<r>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-=  E< a >E< s >E< r >{R^a_ss'| policy = pi} + E< a >E< s >E< r >{gamma*Rt | policy = pi,s_t+1 = s'}
+	= E<a>E<s'>E<r>{R^a_ss'| policy = pi} + E<a>E<s>E<r>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-= E< a >E< s >E< r >{R^a_ss'| policy = pi} + E< a >E< s >E< r >E_pi{gamma*Rt | s_t+1 = s'}
+	= E<a>E<s'>E<r>{R^a_ss'| policy = pi} + E<a>E<s>E<r>E_pi{gamma*Rt | s_t+1 = s'}
 
-= E< a >E< s >E< r >[R^a_ss' + gamma*V^pi(s')]
+	= E<a>E<s'>E<r>[R^a_ss' + gamma*V^pi(s')]
 
+# 20.12.31
+## 《reinforcement learning》
+### 3.7 Value Functions
+	backup diagram
+	s_t   		s
+	    	   / \
+	a_t 	  a' a''
+	r_t+1     |   |
+	s_t+1     s'  s''
 
+### 3.8 Optimal Value Functions
+optimal pi*: 
+
+	pi* = max pi. (pi >= pi', only if for all s V^pi(s) >= V^pi'(s))
+
+optimal state-value function V*:
+
+	V*(s) = max<pi> V^pi(s). (for all s)
+
+optimal action-value function Q*:
+
+	Q*(s, a) = max<pi> Q^pi(s, a). (for all s and a)
+	Q*(s, a) = E{r_t+1 + gamma * V*(s_t+1) | s_t = s, a_t = a}
+			 = E<s'>{R^a_ss' + gamma * V*(s') | s_t = s, a_t = a}
+
+relationship between V* and Q*:
+
+	V*(s) = max<a> Q^pi*(s, a)		(PS. 个人认为这里的Q^pi*可以直接用Q*表示，因为根据上文提到的Q*的公式可以确定，使Q取到最大值的pi就是pi*，因此Q* = Q^pi*)
+	V*(s) = max<a> E<s'>{R^a_ss' + gamma * V*(s') | s_t = s, a_t = a}
+
+bellman equation for Q*:
+
+	Q* = max<pi> Q^pi(s, a)
+	Q*(s, a) = E<s'>{R^a_ss' + max<pi> [ gamma * V*(s') ] | s_t = s, a_t = a}
+			 = E<s'>{R^a_ss' + max<pi> [ gamma * max<a'> Q^pi*(s', a')]}
+			 = E<s'>{R^a_ss' + max<a'> [ gamma * max<pi> Q^pi*(s', a')]}
+			 (以上2步其实可以直接省略，但是由于书中区分使用了Q*和Q^pi*，所以此处没有省略)
+			 = E<s'>{R^a_ss' + max<a'> gamma * Q*(s', a')]}
 
 
 
