@@ -91,7 +91,7 @@ rl系统的四个主要子元素：policy、reward function、value function、m
 
 policy决定了在给定的时间内agent的行为方式。policy是这样一种映射，能够实现：感知到的state of environment --> action in that state。policy是rl中agent的核心，只靠policy agent就足够决定行为。一般情况，policy可能是随机的。
 
-reward func定义了rl问题中的目标（moop：优化问题中的目标函数）。reward func是一个状态立即、固有的价值（原文：desirability）。
+reward func定义了rl问题中的目标（moop：优化问题中的目标函数）。reward func是一个状态**立即、固有**的价值（原文：desirability）。
 agent无法改变reward func，reward func是修改policy的依据。如果在某个policy下，做出的action收获了较低的reward，那么可以修改policy。一般情况，reward func是随机的。
 
 value func是一个状态长远情况下的价值（desirability）。某一个状态本身的价值可能不高，但他后续状态的价值可能很高，这就会使这个状态具有一个high value和一个low reward。
@@ -454,7 +454,27 @@ bellman equation for Q*:
 			 = E<s'>{R^a_ss' + max<pi> [ gamma * max<a'> Q^pi*(s', a')]}
 			 = E<s'>{R^a_ss' + max<a'> [ gamma * max<pi> Q^pi*(s', a')]}
 			 (以上2步其实可以直接省略，但是由于书中区分使用了Q*和Q^pi*，所以此处没有省略)
-			 = E<s'>{R^a_ss' + max<a'> gamma * Q*(s', a')]}
+			 = E<s'>{R^a_ss' + max<a'> [ gamma * Q*(s', a')]}
+			 = max<a'> E<s'>{R^a_ss' + [ gamma * Q*(s', a')]}
+
+
+# 21.1.13
+## 《reinforcement learning》
+### 3.8 Optimal Value Functions
+
+figure 3.7 直观解释了V* 和 Q*的表达式含义
+
+Bellman optimality equation包含两部分：V* 和 Q*
+
+在实际问题中，Bellman equation实际是一个系统方程，每一个state都有一个对应的方程
+
+确定了R^a_ss'和P^a_ss'就可以确定一个environment的dynamics
+
+一旦确定了V* 就可以很容易的制定optimal policy。If you have the optimal value function, V∗, then the actions that appear best after a one-step search will be optimal actions.
+
+确定了V* 后，任何一种追求短期reward的贪心算法都将会是optimal policy，因为**V* 将长远optimal expected return转变成了一个数，一个在每个state下都可以立即确定的数**
+
+一旦确定了Q* 就可以很容易的选出最优action。因为Q* function有效的将所有一步搜索的结果缓存了下来（cache）。**Q* 把optimal expected long-term return转变成了一个数，一个在每个(state, action)下都可以立即得到的数**
 
 
 
