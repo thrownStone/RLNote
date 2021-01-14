@@ -472,11 +472,56 @@ Bellman optimality equation包含两部分：V* 和 Q*
 
 一旦确定了V* 就可以很容易的制定optimal policy。If you have the optimal value function, V∗, then the actions that appear best after a one-step search will be optimal actions.
 
-确定了V* 后，任何一种追求短期reward的贪心算法都将会是optimal policy，因为**V* 将长远optimal expected return转变成了一个数，一个在每个state下都可以立即确定的数**
+确定了V* 后，任何一种追求短期reward的贪心算法都将会是optimal policy，因为**V\* 将长远optimal expected return转变成了一个数，一个在每个state下都可以立即确定的数**
 
-一旦确定了Q* 就可以很容易的选出最优action。因为Q* function有效的将所有一步搜索的结果缓存了下来（cache）。**Q* 把optimal expected long-term return转变成了一个数，一个在每个(state, action)下都可以立即得到的数**
+一旦确定了Q* 就可以很容易的选出最优action。因为Q* function有效的将所有一步搜索的结果缓存了下来（cache）。**Q\*把optimal expected long-term return转变成了一个数，一个在每个(state, action)下都可以立即得到的数**
 
 
+# 21.1.14
+## 《reinforcement learning》
+### 3.8 Optimal Value Functions
+
+#### example 3.11: Bellman Optimality Equations for the Recycling Robot
+V* Bellman optimal formulation示例，推导过程中中间过程有标记错误
+
+直接求解Bellman optimality equation类似于枚举搜索，需要考虑所有的可能、计算这些可能出现的概率以及期望reward。
+
+这种解法需要至少满足3个条件/假设才可以：
+
+	1. 准确地知道environment的dynamics（P^a_ss' & R^a_ss'）
+	2. 有足够的计算资源来完成解的计算
+	3. 是马尔可夫过程
+
+但是在应用中，这3种假设彼此间常常是冲突的。例如，在都满足1和3时，2可能无法满足。
+
+许多不同的决策方法可以视作是Bellman optimality equation的近似解，动态规划（DP）与bellman optimality equation关系更加密切。
+
+RL中的一些方法也可以看作是Bellman optimality equation的近似解，在这些方法中，使用实际经验转移（actual experienced transition）代替了期望转移（expected transition）
+
+### 3.9 Optimality and Approximation
+
+实际问题中，agent很少能够学到optimal policy。
+
+一个好的关于optimality的定义把书中所描述的学习方法组织了起来（organize），并且也提供了一种理解不同learning algorithms理论性质的方法。但是optimality是ideal，agent无法达到，只能不同程度上去逼近。
+
+agent在学习过程中面临的一个非常critical的问题是：算力限制（computation power）。尤其是在**一步决策中（a single time step）**所拥有的computation power。
+
+存储能力也是一个重要的限制（memory available）。当state数量比较少时，可以使用表格或数组来记录数据，这种情况称为tabular case。但在实际问题中，state的数量往往比较多，因此需要使用包含更多参数的方程来表示Bellman optimality equation。
+
+我们对RL问题的框架（framing）设计强迫我们必须解决近似问题。
+
+由于RL的on-line nature，RL方法往往会花费更多的精力去学习为经常遇到的state做出good decision，代价是更少的关注不经常出现的state。
+**这是区分RL和其他逼近MDP问题的关键性质（key property）**
+
+### 3.10 SUmmary
+
+- The reinforcement learning agent and its environment interact over **a sequence of discrete time steps**
+- the actions are the choices made by the agent; 
+- the states are the basis for making the choices; 
+- the rewards are the basis for evaluating the choices.
+- A policy is a **stochastic rule** by which the agent **selects actions** as a **function of states**
+
+policy是选择action的rule，policy的具体formulation由Q*(s, a)决定。
 
 
 
