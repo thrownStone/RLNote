@@ -523,6 +523,13 @@ agent在学习过程中面临的一个非常critical的问题是：算力限制�
 
 policy是选择action的rule，policy的具体formulation由Q*(s, a)决定。
 
+RL问题在agent获取knowledge程度不同时是不同的：
+
+- complete knowledge：environment完全可知
+- MDP：model包含一步转移概率和期望reward
+- incomplete knowledge：无法获取关于environment的完美model
+
+
 
 
 
