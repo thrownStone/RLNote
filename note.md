@@ -405,17 +405,17 @@ Bellmen Equation基于个人理解的推导:
 
 	= E<Rt>{Rt | policy = pi, s_t = s}						<>表示求均值的变量
 
-	= E<r>{r_t+1 + gamma*Rt | policy = pi, s_t = s}		(注意，这里的Rt时刻从t+2开始
+	= E<r_t+1>{r_t+1 + gamma*Rt | policy = pi, s_t = s}		(注意，这里的Rt时刻从t+2开始
 
-	= E<a>E<s'>E<r>{r_t+1 + gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+	= E<a>E<s'>E<r_t+1>{r_t+1 + gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-	= E<a>E<s'>E<r>{r_t+1| policy = pi, s_t = s, a_t = a, s_t+1 = s'} + E<a>E<s>E<r>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+	= E<a>E<s'>E<r_t+1>{r_t+1| policy = pi, s_t = s, a_t = a, s_t+1 = s'} + E<a>E<s>E<r_t+1>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-	= E<a>E<s'>E<r>{R^a_ss'| policy = pi} + E<a>E<s>E<r>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
+	= E<a>E<s'>{R^a_ss'| policy = pi} + E<a>E<s>{gamma*Rt | policy = pi, s_t = s, a_t = a, s_t+1 = s'}
 
-	= E<a>E<s'>E<r>{R^a_ss'| policy = pi} + E<a>E<s>E<r>E_pi{gamma*Rt | s_t+1 = s'}
+	= E<a>E<s'>{R^a_ss'| policy = pi} + E<a>E<s>E_pi{gamma*Rt | s_t+1 = s'}
 
-	= E<a>E<s'>E<r>[R^a_ss' + gamma*V^pi(s')]
+	= E<a>E<s'>[R^a_ss' + gamma*V^pi(s')]
 
 # 20.12.31
 ## 《reinforcement learning》
@@ -504,16 +504,16 @@ RL中的一些方法也可以看作是Bellman optimality equation的近似解，
 
 一个好的关于optimality的定义把书中所描述的学习方法组织了起来（organize），并且也提供了一种理解不同learning algorithms理论性质的方法。但是optimality是ideal，agent无法达到，只能不同程度上去逼近。
 
-agent在学习过程中面临的一个非常critical的问题是：算力限制（computation power）。尤其是在**一步决策中（a single time step）**所拥有的computation power。
+agent在学习过程中面临的一个非常critical的问题是：**算力限制（computation power）**。尤其是在**一步决策中（a single time step）**所拥有的computation power。
 
-存储能力也是一个重要的限制（memory available）。当state数量比较少时，可以使用表格或数组来记录数据，这种情况称为tabular case。但在实际问题中，state的数量往往比较多，因此需要使用包含更多参数的方程来表示Bellman optimality equation。
+**存储能力**也是一个重要的限制（**memory available**）。当state数量比较少时，可以使用表格或数组来记录数据，这种情况称为tabular case。但在实际问题中，state的数量往往比较多，因此需要使用包含更多参数的方程来表示Bellman optimality equation。
 
 我们对RL问题的框架（framing）设计强迫我们必须解决近似问题。
 
 由于RL的on-line nature，RL方法往往会花费更多的精力去学习为经常遇到的state做出good decision，代价是更少的关注不经常出现的state。
 **这是区分RL和其他逼近MDP问题的关键性质（key property）**
 
-### 3.10 SUmmary
+### 3.10 Summary
 
 - The reinforcement learning agent and its environment interact over **a sequence of discrete time steps**
 - the actions are the choices made by the agent; 
@@ -528,6 +528,30 @@ RL问题在agent获取knowledge程度不同时是不同的：
 - complete knowledge：environment完全可知
 - MDP：model包含一步转移概率和期望reward
 - incomplete knowledge：无法获取关于environment的完美model
+
+# 21.1.18
+DRL参考网址：https://simoninithomas.github.io/deep-rl-course/#syllabus
+
+补充：适合DRL的问题
+
+	1. 非凸优化
+	2. 缺少求解所需的基础信息
+	3. 传统模型假设or限制条件过于严格，将限制条件放宽时可以使用DRL
+	注：DRL的效果和参数设置、state、action、reward的构建都有关系，不同的配置会使最终的结果不同
+
+## 《reinforcement learning》
+### 4 Dynamic Programming
+
+key idea of DP, the use of value functions to organize and structure the search for good policies
+
+### 4.1 Policy Evaluation
+
+Bellman Equation for Vk(s)在k趋近无穷时能够收敛到V^pi. 这种算法叫做iterative policy evaluation（为什么随意赋初始值，一定会在无穷处收敛？）
+
+Bellman Equation for Vk(s)的更新操作是一种fullbackup（全备份）。每次迭代都会备份一次state的value用来计算新的估计值、
+
+在实际应用中使用迭代计算非常耗时，因此，可以使用差值比较的方法来判断何时停止。
+
 
 
 
