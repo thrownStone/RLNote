@@ -445,6 +445,9 @@ optimal action-value function Q*:
 relationship between V* and Q*:
 
 	V*(s) = max<a> Q^pi*(s, a)		(PS. 个人认为这里的Q^pi*可以直接用Q*表示，因为根据上文提到的Q*的公式可以确定，使Q取到最大值的pi就是pi*，因此Q* = Q^pi*)
+
+Bellman optimality equation for V*：
+
 	V*(s) = max<a> E<s'>{R^a_ss' + gamma * V*(s') | s_t = s, a_t = a}
 
 bellman equation for Q*:
@@ -455,7 +458,7 @@ bellman equation for Q*:
 			 = E<s'>{R^a_ss' + max<a'> [ gamma * max<pi> Q^pi*(s', a')]}
 			 (以上2步其实可以直接省略，但是由于书中区分使用了Q*和Q^pi*，所以此处没有省略)
 			 = E<s'>{R^a_ss' + max<a'> [ gamma * Q*(s', a')]}
-			 = max<a'> E<s'>{R^a_ss' + [ gamma * Q*(s', a')]}
+			 （= max<a'> E<s'>{R^a_ss' + [ gamma * Q*(s', a')]}）
 
 
 # 21.1.13
@@ -545,17 +548,97 @@ DRL参考网址：https://simoninithomas.github.io/deep-rl-course/#syllabus
 key idea of DP, the use of value functions to organize and structure the search for good policies
 
 ### 4.1 Policy Evaluation
+如何得到approximation V(s)
 
-Bellman Equation for Vk(s)在k趋近无穷时能够收敛到V^pi. 这种算法叫做iterative policy evaluation（为什么随意赋初始值，一定会在无穷处收敛？）
+Bellman Equation for Vk(s)在k趋近无穷时能够收敛到V^pi. 这种算法叫做iterative policy evaluation（为什么随意赋初始值，一定会在无穷处收敛？
+
+V^pi本质是期望，根据backup图，可以直观地看出，只要最后存在终止状态 or 新增的量为无穷小，均值一定会收敛，这保证了V^pi的**存在**和**唯一**，即书中所说 “either γ <1 or eventual termination is guaranteed from all states under the policy π.”）
 
 Bellman Equation for Vk(s)的更新操作是一种fullbackup（全备份）。每次迭代都会备份一次state的value用来计算新的估计值、
 
-在实际应用中使用迭代计算非常耗时，因此，可以使用差值比较的方法来判断何时停止。
+在实际应用中使用不可能无穷迭代下去，因此，要设置可以接受的差值，使用差值比较的方法来判断何时停止。
 
+# 21.1.19
+## 《reinforcement learning》
+### 4.2 Policy Improvement
+如何提升V(s)
 
+Q^π(s, π(s)) ≥ V^π(s).
 
+π‘(s) = arg max< a > Q^pi(s, a)
 
+Policy improvement thus must give us a strictly better policy except when the original policy is already optimal
 
+the policy improvement theorem carries:
 
+	Q^pi(s, pi'(s)) = sum(a) pi'(s, a) * Q^pi(s, a)
 
+### 4.3 Policy Iteration
+实际应用中，不断迭代：逼近V(s) -> 提升V(s)
 
+### 4.4 Value Iteration
+value iteration：截断policy evaluation，减少搜索时间
+
+formulation:
+
+	Vk+1(s) = max<a> E{r_t+1 = gamma * Vk(s') | st = s, at = a}
+
+### 4.5 Asynchronous Dynamic Programming
+解决搜索状态空间耗时较长的问题，单位给出具体方法
+
+### 4.6 Generalized Policy Iteration
+再次阐述了iteration。当达到（接近）bellman optimal equation时稳定。
+
+### 4.7 Efficiency of Dynamic Programming
+
+### 5.1 Monte Carlo Policy Evaluation
+Whereas the DP diagram (Figure 3.4a) shows all possible transitions, the Monte Carlo diagram shows only those sampled on the one episode.
+
+An important fact about Monte Carlo methods is that the estimates for each state are independent
+
+### 5.2 Monte Carlo Estimation of Action Values
+If a model is not available, then it is particularly useful to estimate action values
+
+The only complication is that many relevant state?action pairs may never be visited.
+
+the first step of each episode starts at a state?action pair, and that every such
+pair has a nonzero probability of being selected as the start. This guarantees that all
+state?action pairs will be visited an infinite number of times in the limit of an infinit
+number of episodes. We call this the assumption of exploring starts.
+
+### 5.3 Monte Carlo Control
+to approximate optimal policies
+
+### 5.4 On-Policy Monte Carlo Control
+How can we avoid the unlikely assumption of exploring starts？
+
+On-policy methods attempt to evaluate
+or improve the policy that is used to make decisions
+
+### 5.5 Evaluating One Policy While Following Another
+
+### 5.8 Summary
+
+Monte Carlo的三种优势:
+
+- First, they can be used to learn op
+timal
+behavior directly from interaction with the environment, with no model of the
+environment抯 dynamics
+- Second, they can be used with simulation or sample mod
+els.
+- Third, it is easy and efficient to focus Monte Carlo methods
+on a small subset of the states.
+
+In designing Monte Carlo control methods we have followed the overall schema of
+generalized policy iteration (GPI)
+
+Rather than use a model to compute the
+value of each state, they simply average many returns that start in the state
+
+In on-policy methods, the agent commits to always
+exploring and tries to find the best policy that still explores. In off-policy methods, the
+agent also explores, but learns a deterministic optimal policy that may be unrelated
+to the policy followed.
+
+### 6.1 TD Prediction
