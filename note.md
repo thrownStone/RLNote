@@ -642,5 +642,4 @@ agent also explores, but learns a deterministic optimal policy that may be unrel
 to the policy followed.
 
 ### 6.1 TD Prediction
-Monte Carlo methods must wait until the end of the episode to determine the increment to V (st) (only then is Rt known), 
-TD methods need wait only until the next time step using the observed reward r_t+1 and the estimate V(st +1)
+Monte Carlo methods must wait until the end of the episode to determine the increment to V (st) (only then is Rt known), TD methods need wait only until the next time step using the observed reward r_t+1 and the estimate V(st +1)
