@@ -445,6 +445,7 @@ optimal action-value function Q*:
 relationship between V* and Q*:
 
 	V*(s) = max<a> Q^pi*(s, a)		(PS. 个人认为这里的Q^pi*可以直接用Q*表示，因为根据上文提到的Q*的公式可以确定，使Q取到最大值的pi就是pi*，因此Q* = Q^pi*)
+	这个等式之所以成立，是因为V*是V的上界。只有当policy只为能取最大值的action分配概率，其他action为概率0时，才能达到V的上界即V*
 
 Bellman optimality equation for V*：
 
@@ -456,7 +457,6 @@ bellman equation for Q*:
 	Q*(s, a) = E<s'>{R^a_ss' + max<pi> [ gamma * V*(s') ] | s_t = s, a_t = a}
 			 = E<s'>{R^a_ss' + max<pi> [ gamma * max<a'> Q^pi*(s', a')]}
 			 = E<s'>{R^a_ss' + max<a'> [ gamma * max<pi> Q^pi*(s', a')]}
-			 (以上2步其实可以直接省略，但是由于书中区分使用了Q*和Q^pi*，所以此处没有省略)
 			 = E<s'>{R^a_ss' + max<a'> [ gamma * Q*(s', a')]}
 			 （= max<a'> E<s'>{R^a_ss' + [ gamma * Q*(s', a')]}）
 
@@ -642,4 +642,43 @@ agent also explores, but learns a deterministic optimal policy that may be unrel
 to the policy followed.
 
 ### 6.1 TD Prediction
-Monte Carlo methods must wait until the end of the episode to determine the increment to V (st) (only then is Rt known), TD methods need wait only until the next time step using the observed reward r_t+1 and the estimate V(st +1)
+Monte Carlo methods must **wait until the end of the episode** to determine the increment to V (st) (only then is Rt known), TD methods need wait only until the next time step using the observed reward r_t+1 and the estimate V(st +1). **TD can work online**
+
+# 21.1.20
+## 《reinforcement learning》
+### lecture 4 
+TD can learn before knowing the final outcome
+
+- TD can learn online after every step
+- MC must wait until end of episode before return is known
+
+TD can learn without the final outcome
+
+- TD can learn from incomplete sequences
+- MC can only learn from complete sequences
+- TD works in continuing (non-terminating) environments
+- MC only works for episodic (terminating) environments
+
+MC: 
+
+	V(St ) = V(St) + alpha * (Gt - V(St))
+	high var, low bias
+
+TD:
+
+	V(St) =  V(St) + alpha * (Rt+1 + V(St+1) - V(St ))
+	low var, high bias
+
+关于MC TD 和DP的图示
+
+eligibility trace用来解决可信度的问题。频繁发生的事件更可信还是最近发生过的事件更可信？ET将两种观点都考虑进去。原有的ET随时间衰减，若事件出现，则加上一个冲激。
+
+### lecture 6
+Estimate value function with function approximation how 提速？
+
+为什么Δw = -1/2...？ A:应该是为了后面微分时好计算
+
+on-policy: that is, they don’t use old data, which makes them weaker on sample efficiency.
+
+off-policy, so they are able to reuse old data very efficiently
+
