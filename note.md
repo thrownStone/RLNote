@@ -716,3 +716,11 @@ DQN:
 CNN介绍：https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
 
 卷积是一种filter，可以提取image的不同特征，如：边缘、锐利等
+
+https://zhuanlan.zhihu.com/p/21421729 DQN初步介绍及ReplayMemory出现的原因（从回忆中学习，避免相邻state间的相关性）
+
+https://cs231n.github.io/convolutional-networks/（CNN）
+
+https://www.zhihu.com/question/52668301/answer/194998098（YJango，CNN）
+
+https://blog.csdn.net/zuolixiangfisher/article/details/89500624?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control（placeholder用法）
