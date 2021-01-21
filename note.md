@@ -682,3 +682,37 @@ on-policy: that is, they don’t use old data, which makes them weaker on sample
 
 off-policy, so they are able to reuse old data very efficiently
 
+### lecture 7
+learn policy directly from experience
+
+### lecture 8
+learn model directly from experience
+
+### An Intro to DRL
+State s: is a complete description of the state of the world (there is no hidden information). In a fully observed environment.
+
+Observation o: is a partial description of the state. In a partially observed environment.
+
+find this optimal policy (hence solving the RL problem) there are two main types of RL methods:
+
+- Policy-based-methods: Train our policy directly to learn which action to take, given a state.
+- Value-based methods: Train a value function to learn which state is more valuable and using this value function to take the action that leads to it.
+
+The Q-Learning is the RL algorithm that
+
+- Trains Q-Function, an action-value function that contains, as internal memory, a Q-table that contains all the state-action pair values.
+- When the training is done, we have an optimal Q-Function, so an optimal Q-Table.
+
+Off-policy: using a different policy for acting and updating.
+
+On-policy: using the same policy for acting and updating.
+
+DQN:
+
+- Preprocessing is an important step. We want to reduce the complexity of our states to reduce the computation time needed for training.
+- why we stack frames together?We stack frames together because it helps us to handle the problem of temporal limitation.
+- Avoid forgetting previous experiences. Our solution: create a “replay buffer.” This stores experience tuples while interacting with the environment, and then we sample a small batch of tuple to feed our neural network. And Reducing correlation between experiences
+
+CNN介绍：https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
+
+卷积是一种filter，可以提取image的不同特征，如：边缘、锐利等
