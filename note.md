@@ -724,3 +724,5 @@ https://cs231n.github.io/convolutional-networks/（CNN）
 https://www.zhihu.com/question/52668301/answer/194998098（YJango，CNN）
 
 https://blog.csdn.net/zuolixiangfisher/article/details/89500624?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control（placeholder用法）
+
+https://zhuanlan.zhihu.com/p/27609238（SGD讲解）
