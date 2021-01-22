@@ -644,7 +644,7 @@ to the policy followed.
 ### 6.1 TD Prediction
 Monte Carlo methods must **wait until the end of the episode** to determine the increment to V (st) (only then is Rt known), TD methods need wait only until the next time step using the observed reward r_t+1 and the estimate V(st +1). **TD can work online**
 
-# 21.1.20
+# 21.1.21
 ## 《reinforcement learning》
 ### lecture 4 
 TD can learn before knowing the final outcome
@@ -726,3 +726,71 @@ https://www.zhihu.com/question/52668301/answer/194998098（YJango，CNN）
 https://blog.csdn.net/zuolixiangfisher/article/details/89500624?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control（placeholder用法）
 
 https://zhuanlan.zhihu.com/p/27609238（SGD讲解）
+
+# 21.1.22
+
+parameter & hyper parameter：
+
+模型参数是根据数据自动估算的。但模型超参数是手动设置的，并且在过程中用于帮助估计模型参数。（https://zhuanlan.zhihu.com/p/37476536）
+
+
+最初DQN的不足：
+
+- However, the problem is that we using the same parameters (weights) for estimating the target and the Q value. As a consequence, there is a big correlation between the TD target and the parameters (w) we are changing.
+- Therefore, it means that at every step of training, our Q values shift but also the target value shifts. So, we’re getting closer to our target but the target is also moving. It’s like chasing a moving target! This lead to a big oscillation in training.
+
+Fixed DQN：
+- 2 network （DQN & TargetNetwork）
+- update Targetwork w- with DQN's parameter
+
+DDQN：
+
+- how are we sure that the best action for the next state is the action with the highest Q-value?
+If non-optimal actions are regularly given a higher Q value than the optimal best action, the learning will be complicated.
+- use our DQN network to select what is the best action to take for the next state
+- use our target network to calculate the target Q value of the next state taking the mentioned action.
+
+Dueling DQN：
+
+- decompose Q(s,a) as the sum of:
+
+	V(s): the value of being at that state  
+	A(s,a): the advantage of taking that action at that state (how much better is to take this action versus all other possible actions at that state).
+
+
+- This is particularly useful for states where their actions do not affect the environment in a relevant way. In this case, it’s unnecessary to calculate the value of each action.
+
+Prioritized Exoerience Replay：
+
+- take in priority experience where there is a big difference between our prediction and the TD target, since it means that we have a lot to learn about it.
+
+**python规范：https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16**
+
+DRL architure
+
+- construct environment(state space, action space)
+- set up hyperparameters(learning_rate...)
+- construct DQN
+- other function or class. i.e, memory
+- get enough sample into memory
+- train agent/DQN
+- test
+
+### code problem
+
+#### generate_channel_gain_centralized
+- rho = 1 #scipy.special.jn(0, 2*math.pi*fd*T_time_slot)
+- Fading_output = complex(rho * Fading_input.real + random.gauss(0, ((1 - rho**2) / 2)**(1/2))
+- Channel_gain_output = Average_channel_gain * Fading_gain. Average_channel-gain?
+
+#### Main.py
+empty
+
+#### Main_SR.py
+- n_element_state = 2 * No_user + 4. what is n_element_state?
+- n_network_input = (n_element_state, )?
+- model_eval
+- boundary = 20?
+- inner_region = 5?
+- db和dbm的转换，SNR利用发射功率和衰落的计算
+- 
