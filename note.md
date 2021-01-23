@@ -787,10 +787,18 @@ DRL architure
 empty
 
 #### Main_SR.py
-- n_element_state = 2 * No_user + 4. what is n_element_state?
+- n_element_state = 2 * No_user + 4. what is n_element_state? ==> t-1时刻与t+1时刻的快衰落状态，以及另外4种状态
 - n_network_input = (n_element_state, )?
 - model_eval
 - boundary = 20?
 - inner_region = 5?
-- db和dbm的转换，SNR利用发射功率和衰落的计算
-- 
+
+# 21.1.23
+#### Main_SR.py
+- channel_gain_bd_user? SNR * | fast fading channel gain | ^ 2 ==> total channel gain
+- channel_gain_bd_user_old, channel_gain_bd_user_new?
+- fading_bd_user?
+- channel_gain_bd_user_last1?
+- state_old[4:No_user+4, u] = Channel_gain_BD_user_last2[u*No_user:(u+1)*No_user] **/ SNR_BD_Avg[u]**?
+- Channel from BS to BD without transmission power. state_old[3, u] = Channel_gain_BS_BD[u]
+
