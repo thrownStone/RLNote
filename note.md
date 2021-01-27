@@ -794,6 +794,7 @@ empty
 - inner_region = 5?
 
 # 21.1.23
+### code problem
 #### Main_SR.py
 - channel_gain_bd_user? SNR * | fast fading channel gain | ^ 2 ==> total channel gain
 - channel_gain_bd_user_old, channel_gain_bd_user_new?
@@ -802,3 +803,6 @@ empty
 - state_old[4:No_user+4, u] = Channel_gain_BD_user_last2[u*No_user:(u+1)*No_user] **/ SNR_BD_Avg[u]**?
 - Channel from BS to BD without transmission power. state_old[3, u] = Channel_gain_BS_BD[u]
 
+# 21.1.26
+### code problem
+#### Main_SR.py
